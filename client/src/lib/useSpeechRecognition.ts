@@ -26,7 +26,7 @@ const useSpeechRecognition = (isActive:boolean) =>{
                 setTranscript(lastResult[0].transcript);
             }
         }
-
+       //added a comment
         recognition.onerror= (event:any)=>{
             setError(event.error)
         }
