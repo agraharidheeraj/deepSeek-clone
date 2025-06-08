@@ -1,6 +1,6 @@
 "use client"
 import { userAuthStore } from "@/store/authStore";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import React, { useEffect } from "react";
 import { Loader } from "./Loader";
 
@@ -11,6 +11,7 @@ const publicRoute = ["/sign-in", "/sign-up"]
 export default function AuthProvider({children}:{children:React.ReactNode}) {
     const {isAuthenticated,isLoading,userProfile,user} = userAuthStore();
     const pathname = usePathname();
+    const router = useRouter();
 
 
 console.log(user)
@@ -22,12 +23,16 @@ console.log(user)
 
     useEffect(() => {
         if(!isLoading) {
-            if(isAuthenticated && !publicRoute.includes(pathname)){
-                return;
+            const isPublic = publicRoute.includes(pathname)
+            if(!isAuthenticated && !isPublic ){
+                router.push('/sign-in')
+            }
+            if(isAuthenticated && isPublic){
+                router.push('/')
             }
         }
         
-    },[isAuthenticated,isLoading,pathname])
+    },[isAuthenticated,isLoading,pathname,router])
 
 
 
